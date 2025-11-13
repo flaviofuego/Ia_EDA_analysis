@@ -1,0 +1,34 @@
+{
+  "variables_numericas_top": [
+    "PUNT_GLOBAL",
+    "PUNT_C_NATURALES",
+    "PUNT_LECTURA_CRITICA",
+    "PUNT_SOCIALES_CIUDADANAS",
+    "PUNT_MATEMATICAS"
+  ],
+  "variables_categoricas_top": [
+    "FAMI_TIENEINTERNET",
+    "FAMI_TIENECOMPUTADOR",
+    "COLE_NATURALEZA",
+    "FAMI_TIENEAUTOMOVIL",
+    "FAMI_EDUCACIONMADRE",
+    "FAMI_EDUCACIONPADRE",
+    "FAMI_TIENELAVADORA",
+    "FAMI_ESTRATOVIVIENDA",
+    "COLE_JORNADA",
+    "COLE_AREA_UBICACION"
+  ],
+  "variables_seleccionadas_modelado": [
+    "PUNT_GLOBAL",
+    "PUNT_C_NATURALES",
+    "PUNT_LECTURA_CRITICA",
+    "PUNT_SOCIALES_CIUDADANAS",
+    "PUNT_MATEMATICAS",
+    "FAMI_TIENEINTERNET",
+    "FAMI_TIENECOMPUTADOR",
+    "COLE_NATURALEZA",
+    "FAMI_TIENEAUTOMOVIL",
+    "FAMI_EDUCACIONMADRE"
+  ],
+  "n_variables_total": 10
+}

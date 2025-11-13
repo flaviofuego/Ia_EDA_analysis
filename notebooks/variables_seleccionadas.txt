@@ -1,0 +1,15 @@
+VARIABLES SELECCIONADAS PARA MODELADO
+============================================================
+
+Top 15 variables más influyentes sobre DESEMP_INGLES:
+
+ 1. PUNT_GLOBAL                              (Numérica)
+ 2. PUNT_C_NATURALES                         (Numérica)
+ 3. PUNT_LECTURA_CRITICA                     (Numérica)
+ 4. PUNT_SOCIALES_CIUDADANAS                 (Numérica)
+ 5. PUNT_MATEMATICAS                         (Numérica)
+ 6. FAMI_TIENEINTERNET                       (Categórica)
+ 7. FAMI_TIENECOMPUTADOR                     (Categórica)
+ 8. COLE_NATURALEZA                          (Categórica)
+ 9. FAMI_TIENEAUTOMOVIL                      (Categórica)
+10. FAMI_EDUCACIONMADRE                      (Categórica)

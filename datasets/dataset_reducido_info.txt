@@ -1,0 +1,28 @@
+================================================================================
+INFORMACIÓN DEL DATASET REDUCIDO
+================================================================================
+
+Fecha de generación: 2025-11-12 11:48:12
+Variable objetivo: DESEMP_INGLES
+Semilla aleatoria: 42
+
+Dataset original:
+  - Observaciones: 1,087,902
+  - Columnas: 51
+
+Dataset reducido:
+  - Observaciones: 217,581
+  - Fracción: 20.0%
+  - Columnas: 51
+
+Distribución de clases:
+Clase  Original_N  Original_%  Muestra_N  Muestra_%  Diff_%  Ratio_Esperado  Ratio_Real
+   A-      538744     49.5214     107749    49.5213  0.0001        107748.8    0.200000
+   A1      306302     28.1553      61260    28.1550  0.0003         61260.4    0.199999
+   A2      158774     14.5945      31755    14.5946  0.0001         31754.8    0.200001
+   B+       14534      1.3360       2907     1.3361  0.0001          2906.8    0.200014
+   B1       69548      6.3929      13910     6.3930  0.0001         13909.6    0.200006
+
+Métricas de estratificación:
+  - Diferencia máxima: 0.0003%
+  - Diferencia promedio: 0.0001%
