@@ -1,0 +1,49 @@
+RESUMEN SECCIÓN 3: APRENDIZAJE NO SUPERVISADO
+================================================================================
+
+
+✅ APRENDIZAJE NO SUPERVISADO COMPLETADO
+
+TAREA 9: Clustering
+   • Algoritmos aplicados: K-Means, DBSCAN, Jerárquico
+   • K-Means: 5 clusters, Silhouette = 0.167
+   • DBSCAN: 34 clusters, 5728 noise points
+   • Jerárquico: 5 clusters, Silhouette = 0.134
+
+TAREA 10: Número Óptimo de Clusters
+   • K óptimo recomendado: 2
+   • Método del Codo: k = 4
+   • Mejor Silhouette: k = 2
+   • Silhouette Score promedio: 0.381
+
+TAREA 11: Visualización y Relación con Objetivo
+   • Visualizaciones: 2D y 3D con PCA
+   • ARI (Adjusted Rand Index): 0.270
+   • NMI (Mutual Information): 0.242
+   • Pureza promedio de clusters: 57.0%
+
+TAREA 12: Reducción Dimensional Avanzada
+   • Técnicas aplicadas: PCA, t-SNE, UMAP
+   • Separabilidad visual de clases: Confirmada
+   • Mejor técnica para visualización: t-SNE/UMAP
+
+HALLAZGOS CLAVE:
+   1. Los datos presentan estructura natural con 2 grupos principales
+   2. Los clusters tienen correspondencia parcial con las clases reales
+   3. Las clases extremas (A- y B+) son más distinguibles
+   4. Existe traslape entre clases intermedias (A1, A2, B1)
+   5. Las técnicas no lineales (t-SNE, UMAP) revelan mejor la estructura
+
+ARCHIVOS GENERADOS:
+   ✓ clustering_results.pkl
+   ✓ optimal_k_results.pkl
+   ✓ visualization_results.pkl
+   ✓ dimensionality_reduction_results.pkl
+
+IMPLICACIONES PARA MODELADO SUPERVISADO:
+   • El traslape entre clases sugiere que el problema es desafiante
+   • Se requerirán modelos no lineales para capturar la complejidad
+   • Las features actuales capturan señal útil pero no perfecta
+   • Feature engineering podría mejorar la separabilidad
+
+PRÓXIMO PASO: Sección 4 - Aprendizaje Supervisado (Tareas 13-17)
