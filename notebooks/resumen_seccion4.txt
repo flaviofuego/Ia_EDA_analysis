@@ -1,0 +1,66 @@
+RESUMEN SECCIÓN 4: APRENDIZAJE SUPERVISADO
+================================================================================
+
+
+✅ APRENDIZAJE SUPERVISADO COMPLETADO
+
+TAREA 13: Entrenamiento de Modelos
+   • Modelos entrenados: 5
+   • Algoritmos: Decision Tree, Random Forest, Logistic Regression, SVM, KNN
+   • Tiempo total de entrenamiento: 26.40s
+
+TAREA 14: Comparación y Evaluación
+   • Mejor modelo (F1-Score): Logistic Regression
+   • F1-Score máximo: 0.9309
+   • Accuracy máximo: 0.9333
+   • Métricas calculadas: Accuracy, Precision, Recall, F1-Score
+   • Matrices de confusión generadas para todos los modelos
+
+TAREA 15: Validación Cruzada
+   • Método: 5-Fold Stratified Cross-Validation
+   • Modelo más estable: Logistic Regression
+   • Menor desviación estándar: 0.00095
+   • Análisis de overfitting realizado
+
+TAREA 16: Ajuste de Hiperparámetros
+   • Modelos optimizados: 2
+   • Métodos: Grid Search y Random Search
+   • Mejora promedio en F1-Score: 0.0138
+
+TAREA 17: Feature Importance
+   • Top features identificadas y consensuadas
+   • Análisis de coeficientes de regresión logística
+   • Estructura del árbol de decisión visualizada
+   • Features para 90% de importancia: 6
+
+ARCHIVOS GENERADOS:
+   ✓ model_comparison_metrics.png
+   ✓ confusion_matrices.png
+   ✓ cross_validation_analysis.png
+   ✓ hyperparameter_tuning_comparison.png
+   ✓ feature_importance_*.png
+   ✓ tuned_models.pkl
+   ✓ feature_importance_analysis.pkl
+
+CONCLUSIONES Y RECOMENDACIONES:
+
+1. RENDIMIENTO GENERAL:
+   Los modelos supervisados logran buenos resultados en la clasificación del
+   nivel de inglés, con F1-Scores superiores a 0.66.
+
+2. MODELO RECOMENDADO:
+   Logistic Regression muestra el mejor balance entre precisión,
+   estabilidad y tiempo de entrenamiento.
+
+3. DESAFÍOS IDENTIFICADOS:
+   • Traslape entre clases intermedias (A1, A2, B1)
+   • Desbalance de clases afecta métricas de clases minoritarias
+   • Algunos modelos muestran signos leves de overfitting
+
+4. PRÓXIMOS PASOS (Sección 5):
+   • Implementar técnicas de balanceo (SMOTE)
+   • Probar ensemble methods avanzados
+   • Feature engineering adicional
+   • Regularización para reducir overfitting
+
+PRÓXIMA SECCIÓN: Sección 5 - Evaluación e Interpretación
