@@ -25,31 +25,39 @@ Aplicar técnicas de aprendizaje automático supervisado y no supervisado para e
 ## 📂 ESTRUCTURA DEL PROYECTO
 
 ```
-proyecto_saber11/
+Ia_EDA_analysis/
 │
-├── README.md                                          # Este archivo
-├── dataset_saber11_reducido_estratificado.csv        # Dataset (217K filas)
+├── README.md                                    # Este archivo
+├── SECCION6_DOCKER_QUICK_START.md              # 🐳 Guía Docker para Sección 6
+├── datasets/
+│   └── dataset_saber11_reducido_estratificado.csv  # Dataset (217K filas)
 │
-├── NOTEBOOKS (Ejecutar en este orden):
-│   ├── PROYECTO_SABER11_PARTE_1_SECCION_1.py        # Tareas 1-3
-│   ├── PROYECTO_SABER11_PARTE_2_SECCION_1_TAREAS_4_5.py  # Tareas 4-5
-│   ├── PROYECTO_SABER11_SECCION_2_PREPROCESAMIENTO.py    # Tareas 6-8
-│   ├── PROYECTO_SABER11_SECCION_3_NO_SUPERVISADO.py      # Tareas 9-12
-│   ├── PROYECTO_SABER11_SECCION_4_SUPERVISADO.py         # Tareas 13-17
-│   ├── PROYECTO_SABER11_SECCION_5_EVALUACION.py          # Tareas 18-20
-│   └── PROYECTO_SABER11_SECCION_6_IMPLEMENTACION_C.py    # Tareas 21-25
+├── notebooks/ (Ejecutar en este orden):
+│   ├── seccion1.ipynb                          # Tareas 1-5
+│   ├── seccion2.ipynb                          # Tareas 6-8
+│   ├── seccion3.ipynb                          # Tareas 9-12
+│   ├── seccion4.ipynb                          # Tareas 13-17
+│   ├── seccion5.ipynb                          # Tareas 18-20
+│   └── seccion6.ipynb                          # Tareas 21-25 (integrado con Docker)
 │
-├── CHECKPOINTS (Generados automáticamente):
-│   ├── checkpoint_seccion1_tareas1-3.json
-│   ├── checkpoint_seccion1_completa.json
-│   ├── variables_seleccionadas.txt
-│   └── [otros checkpoints por sección]
+├── seccion6_c_docker/ (🐳 Implementación en C con Docker):
+│   ├── Dockerfile                              # Imagen Docker
+│   ├── docker-compose.yml                      # Orquestación
+│   ├── README.md                               # Documentación completa
+│   ├── src/
+│   │   ├── knn_classifier.c                    # Implementación KNN (595 líneas)
+│   │   └── Makefile                            # Compilación
+│   ├── data/                                   # Datos (generados desde Python)
+│   ├── results/                                # Outputs
+│   └── scripts/
+│       ├── build.sh                            # Construir imagen
+│       └── run.sh                              # Ejecutar contenedor
 │
-└── IMPLEMENTACIÓN EN C:
-    ├── modelo_knn.c                                  # Implementación de KNN en C
-    ├── funciones_auxiliares.c                        # Funciones de utilidad
-    ├── main.c                                        # Programa principal
-    └── README_C.md                                   # Instrucciones de compilación
+└── CHECKPOINTS (Generados automáticamente):
+    ├── checkpoint_seccion1_tareas1-3.json
+    ├── checkpoint_seccion1_completa.json
+    ├── variables_seleccionadas.txt
+    └── [otros checkpoints por sección]
 ```
 
 ---
@@ -188,29 +196,47 @@ cat PROYECTO_SABER11_*.py > PROYECTO_COMPLETO.py
 
 ---
 
-### 💻 SECCIÓN 6: IMPLEMENTACIÓN EN C (Tareas 21-25)
+### 💻 SECCIÓN 6: IMPLEMENTACIÓN EN C CON DOCKER (Tareas 21-25)
 
-**Archivo**: `PROYECTO_SABER11_SECCION_6_IMPLEMENTACION_C.py` + archivos `.c`
+**Archivo**: `notebooks/seccion6.ipynb` + carpeta `seccion6_c_docker/`
 
 - **Tarea 21**: Selección y justificación de algoritmo (KNN)
 - **Tarea 22**: Diseño de estructuras y funciones (pseudocódigo)
-- **Tarea 23**: Implementación completa en C
-- **Tarea 24**: Evaluación y comparación con Python
+- **Tarea 23**: Implementación completa en C (595 líneas) - **Containerizada con Docker**
+- **Tarea 24**: Evaluación y comparación con Python (integrado con Docker)
 - **Tarea 25**: Optimización y reflexión técnica
 
-**Outputs**:
-- `modelo_knn.c`, `funciones_auxiliares.c`, `main.c`
-- `train_data_c.csv`, `test_data_c.csv`
-- `resultados_comparacion_python_c.txt`
-- Ejecutable compilado: `./knn_classifier`
-
-**Compilación**:
-```bash
-gcc -o knn_classifier modelo_knn.c funciones_auxiliares.c main.c -lm
-./knn_classifier train_data_c.csv test_data_c.csv
+**Estructura Docker**:
+```
+seccion6_c_docker/
+├── Dockerfile              # Imagen Docker (gcc:13.2.0)
+├── docker-compose.yml      # Orquestación
+├── src/
+│   ├── knn_classifier.c   # Implementación KNN (595 líneas)
+│   └── Makefile           # Compilación
+├── data/                  # Datos (generados desde Python)
+├── results/               # Outputs
+└── scripts/
+    ├── build.sh          # Construir imagen
+    └── run.sh            # Ejecutar contenedor
 ```
 
-**Tiempo estimado**: 30-40 minutos
+**Ejecución con Docker** (Recomendado):
+```bash
+cd seccion6_c_docker
+docker-compose up --build
+```
+
+**Ejecución tradicional** (Sin Docker):
+```bash
+cd seccion6_c_docker/src
+make
+./knn_classifier ../data/train_data_c.csv ../data/test_data_c.csv 5
+```
+
+**Documentación**: Ver `SECCION6_DOCKER_QUICK_START.md` y `seccion6_c_docker/README.md`
+
+**Tiempo estimado**: 15-20 minutos (con Docker)
 
 ---
 

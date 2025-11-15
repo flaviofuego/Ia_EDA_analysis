@@ -1,0 +1,37 @@
+# =============================================================================
+# Docker Compose para el clasificador KNN en C
+# =============================================================================
+# 
+# Universidad del Norte - Inteligencia Artificial
+# Proyecto: Predicción de Desempeño en Inglés - Saber 11
+# 
+# Uso:
+#   docker-compose up --build    - Construir y ejecutar
+#   docker-compose run knn k=7   - Ejecutar con k personalizado
+# 
+# =============================================================================
+
+version: '3.8'
+
+services:
+  knn:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: knn_classifier_c
+    volumes:
+      # Montar datos de entrada (generados desde Python)
+      - ./data:/app/data:ro
+      # Montar carpeta de resultados (salida)
+      - ./results:/app/results:rw
+    environment:
+      - K_VALUE=5
+    command: >
+      sh -c "
+        echo '🚀 Iniciando KNN Classifier en C...' &&
+        echo '📊 Parámetros: K=$${K_VALUE:-5}' &&
+        echo '' &&
+        ./knn_classifier data/train_data_c.csv data/test_data_c.csv $${K_VALUE:-5} | tee results/output.txt &&
+        echo '' &&
+        echo '✅ Resultados guardados en results/output.txt'
+      "
