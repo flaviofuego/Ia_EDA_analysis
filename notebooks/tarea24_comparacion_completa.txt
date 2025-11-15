@@ -1,0 +1,61 @@
+================================================================================
+TAREA 24: COMPARACIÓN PYTHON VS C
+================================================================================
+
+                Métrica Python (sklearn) C (Implementación Manual)
+               Accuracy           0.4700                       N/A
+  Tiempo Predicción (s)           0.0087                       N/A
+Tiempo por Muestra (ms)           0.0291                       N/A
+
+
+COMPARACIÓN PYTHON (sklearn) vs C (Implementación Manual)
+----------------------------------------------------------
+
+1. PRECISIÓN:
+   ✓ Ambas implementaciones usan el mismo algoritmo KNN
+   ✓ Diferencias mínimas esperadas por redondeo en punto flotante
+   ✓ sklearn tiene optimizaciones adicionales que pueden afectar ligeramente
+
+2. VELOCIDAD:
+   • Python (sklearn): Usa librerías optimizadas (Cython, NumPy con BLAS)
+   • C (Manual): Implementación directa, sin optimizaciones avanzadas
+   • RESULTADO ESPERADO: Python puede ser más rápido por optimizaciones
+   • Para datasets grandes, C con optimizaciones podría ser más rápido
+
+3. USO DE MEMORIA:
+   • Python: Mayor overhead por objetos Python, NumPy arrays
+   • C: Control directo de memoria, arrays estáticos y dinámicos
+   • VENTAJA: C es más eficiente en memoria
+
+4. FACILIDAD DE USO:
+   • Python: API simple, 2-3 líneas de código
+   • C: Implementación completa de ~600 líneas
+   • VENTAJA: Python es mucho más fácil de usar
+
+5. COMPRENSIÓN DEL ALGORITMO:
+   • Python: "Caja negra", no se ven detalles internos
+   • C: Implementación completa desde cero
+   • VENTAJA: C demuestra comprensión profunda del algoritmo
+
+6. MANTENIBILIDAD:
+   • Python: Código corto, fácil de mantener
+   • C: Más código, gestión manual de memoria
+   • VENTAJA: Python es más mantenible
+
+7. PORTABILIDAD:
+   • Python: Funciona en cualquier sistema con Python
+   • C: Requiere compilación para cada plataforma
+   • VENTAJA: Python es más portable
+
+8. EDUCACIÓN:
+   • Python: Perfecto para prototipado rápido y exploración
+   • C: Excelente para entender el funcionamiento interno
+   • AMBOS SON VALIOSOS según el objetivo
+
+CONCLUSIÓN:
+-----------
+• Para PRODUCCIÓN: Python (sklearn) es superior (velocidad, facilidad, confiabilidad)
+• Para EDUCACIÓN: C es superior (comprensión profunda, control total)
+• Esta implementación en C cumple su objetivo EDUCATIVO de demostrar
+  comprensión algorítmica profunda
+

@@ -1,0 +1,42 @@
+
+================================================================================
+TAREA 25: ANÁLISIS COMPLETO DE LIMITACIONES Y OPTIMIZACIONES
+================================================================================
+
+RESUMEN EJECUTIVO:
+------------------
+La implementación de KNN en C cumple su objetivo educativo de demostrar
+comprensión profunda del algoritmo. Sin embargo, existen numerosas
+oportunidades de optimización para mejorar rendimiento y escalabilidad.
+
+LIMITACIONES PRINCIPALES:
+-------------------------
+1. Complejidad O(n*d + n*log(n)) por predicción
+2. Almacenamiento de todo el dataset en memoria O(n*d)
+3. Sin paralelización (código secuencial)
+4. Sin estructuras de datos avanzadas (KD-Tree, Ball Tree)
+5. Límite fijo de MAX_FEATURES=20
+
+OPTIMIZACIONES DE ALTO IMPACTO:
+-------------------------------
+1. KD-Tree: 10-100x speedup
+2. OpenMP Parallelization: 4-16x speedup
+3. Heap Parcial: 2-5x speedup
+4. SIMD Vectorization: 2-4x speedup
+
+SPEEDUP TOTAL ESTIMADO: 100-500x con todas las optimizaciones
+
+TRADE-OFFS:
+----------
+• Complejidad de Código: Simple → Complejo
+• Tiempo de Desarrollo: 1 día → 2-3 semanas
+• Mantenibilidad: Alta → Media-Baja
+• Portabilidad: Alta → Media
+
+RECOMENDACIÓN FINAL:
+-------------------
+Para PRODUCCIÓN: Usar sklearn (implementación batalla-probada)
+Para EDUCACIÓN: Esta implementación en C es ideal
+Para INVESTIGACIÓN: Implementar optimizaciones específicas según necesidad
+
+================================================================================

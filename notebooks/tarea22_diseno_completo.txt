@@ -1,0 +1,258 @@
+
+================================================================================
+TAREA 22: DISEÑO COMPLETO DE IMPLEMENTACIÓN KNN EN C
+================================================================================
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│                   DIAGRAMA DE FLUJO KNN EN C                     │
+└─────────────────────────────────────────────────────────────────┘
+
+                           [INICIO]
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  Leer argumentos    │
+                    │  (train.csv,        │
+                    │   test.csv, k)      │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  load_dataset()     │
+                    │  Cargar datos de    │
+                    │  entrenamiento      │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  load_dataset()     │
+                    │  Cargar datos de    │
+                    │  prueba             │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  create_knn_model() │
+                    │  Inicializar modelo │
+                    │  con k=5            │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  knn_fit()          │
+                    │  Almacenar datos    │
+                    │  de entrenamiento   │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+              ╔═══════════════════════════════╗
+              ║  BUCLE: Para cada punto test  ║
+              ╚═══════════════════════════════╝
+                              │
+                              ▼
+           ┌──────────────────────────────────────┐
+           │  knn_predict_single()                │
+           │  ┌────────────────────────────────┐  │
+           │  │ Para cada punto entrenamiento: │  │
+           │  │ - euclidean_distance()         │  │
+           │  │ - Actualizar vecinos array     │  │
+           │  └────────────────────────────────┘  │
+           │  ┌────────────────────────────────┐  │
+           │  │ qsort(vecinos)                 │  │
+           │  │ Ordenar por distancia          │  │
+           │  └────────────────────────────────┘  │
+           │  ┌────────────────────────────────┐  │
+           │  │ majority_vote()                │  │
+           │  │ - Contar votos por clase       │  │
+           │  │ - Retornar clase ganadora      │  │
+           │  └────────────────────────────────┘  │
+           └──────────────────┬───────────────────┘
+                              │
+                              ▼
+              ╔═══════════════════════════════╗
+              ║  FIN BUCLE                    ║
+              ╚═══════════════════════════════╝
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  Evaluar resultados │
+                    │  - calculate_       │
+                    │    accuracy()       │
+                    │  - confusion_       │
+                    │    matrix()         │
+                    │  - per_class_       │
+                    │    metrics()        │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+                    ┌─────────────────────┐
+                    │  Liberar memoria    │
+                    │  - free_dataset()   │
+                    │  - free_knn_model() │
+                    └──────────┬──────────┘
+                              │
+                              ▼
+                            [FIN]
+
+
+
+================================================================================
+DOCUMENTACIÓN DE ESTRUCTURAS DE DATOS
+================================================================================
+
+1. DataPoint
+   Propósito: Representar un punto de datos con sus características y etiqueta
+   Tamaño: sizeof(double) * MAX_FEATURES + sizeof(int)
+   Uso: Almacenamiento de datos de entrenamiento y prueba
+
+2. Dataset
+   Propósito: Contenedor para múltiples puntos de datos
+   Tamaño: Dinámico según n_samples
+   Uso: Gestión de conjuntos de entrenamiento y prueba
+
+3. Neighbor
+   Propósito: Almacenar información de vecinos cercanos
+   Tamaño: sizeof(int) + sizeof(double) + sizeof(int)
+   Uso: Array de vecinos durante la predicción
+
+4. KNNModel
+   Propósito: Modelo completo de KNN
+   Tamaño: sizeof(Dataset*) + sizeof(int)
+   Uso: Entidad principal para entrenamiento y predicción
+
+DECISIONES DE DISEÑO:
+- Arrays estáticos para features (MAX_FEATURES) dentro de DataPoint
+- Punteros para datasets (malloc una vez) para manejar tamaños variables
+- Estructuras simples sin herencia ni polimorfismo (C puro)
+- Funciones que reciben punteros para eficiencia
+
+GESTIÓN DE MEMORIA:
+- malloc() para datasets (tamaño conocido en runtime)
+- free() explícito en funciones de limpieza
+- Sin memory leaks (verificable con valgrind)
+
+================================================================================
+
+
+FUNCIONES PRINCIPALES:
+================================================================================
+
+1. load_dataset(filename, n_features, n_classes)
+   - Lee archivo CSV línea por línea con fgets
+   - Parsea features y labels con strtok
+   - Retorna Dataset* con datos cargados
+   - Maneja errores de lectura y memoria
+
+2. euclidean_distance(point1, point2, n_features)
+   - Calcula suma de diferencias al cuadrado
+   - Aplica sqrt() del resultado (math.h)
+   - Complejidad: O(d) donde d=features
+
+3. knn_predict_single(model, test_point)
+   - Calcula distancias a todos los puntos
+   - Ordena con qsort estándar de C
+   - Toma k vecinos más cercanos
+   - Realiza votación mayoritaria
+   - Complejidad: O(n*d + n*log(n))
+
+4. majority_vote(neighbors, k, n_classes)
+   - Inicializa array de contadores con calloc
+   - Cuenta votos por clase en un bucle
+   - Encuentra clase con más votos
+   - Maneja empates (primera clase encontrada)
+   - Complejidad: O(k + c)
+
+5. calculate_accuracy(y_true, y_pred, n_samples)
+   - Compara predicciones con etiquetas reales
+   - Cuenta aciertos
+   - Retorna porcentaje de aciertos
+   - Complejidad: O(n)
+
+6. print_confusion_matrix(y_true, y_pred, n_samples, n_classes)
+   - Crea matriz c×c con malloc
+   - Llena matriz contando coincidencias
+   - Imprime matriz formateada
+   - Libera memoria
+   - Complejidad: O(n + c²)
+
+7. print_per_class_metrics(y_true, y_pred, n_samples, n_classes)
+   - Calcula TP, FP, FN por clase
+   - Calcula Precision, Recall, F1-Score
+   - Imprime tabla formateada
+   - Complejidad: O(n * c)
+
+OPTIMIZACIONES IMPLEMENTADAS:
+================================================================================
+
+1. qsort estándar:
+   - Usa implementación optimizada de stdlib
+   - Más eficiente que sorting manual
+   - Bien probada y confiable
+
+2. Normalización Previa:
+   - Datos normalizados en Python antes de exportar
+   - Evita operaciones de normalización en C
+   - Reduce complejidad del código C
+
+3. Lectura Eficiente:
+   - Buffer de lectura para CSV (MAX_LINE_LENGTH)
+   - Parseo optimizado con strtok
+   - Una sola pasada por el archivo (después de contar)
+
+4. Gestión de Memoria:
+   - malloc solo cuando es necesario
+   - free inmediato después de uso
+   - calloc para inicializar arrays en cero
+
+LIMITACIONES ACEPTADAS:
+================================================================================
+
+1. Dataset pequeño (1,000 muestras):
+   - Compromiso entre tiempo de ejecución y demostración
+   - Para datasets grandes, se requieren estructuras avanzadas (KD-Tree)
+
+2. Features limitadas (10):
+   - Reduce complejidad de lectura
+   - Mantiene código simple y entendible
+   - Suficiente para demostración
+
+3. Sin optimizaciones avanzadas:
+   - No usa KD-Tree ni Ball Tree (reducirían a O(log(n)))
+   - No paraleliza cálculos (posible con OpenMP)
+   - Prioriza claridad sobre velocidad extrema
+
+4. MAX_FEATURES fijo:
+   - Define límite máximo en compile-time
+   - Simplifica gestión de memoria
+   - Evita malloc dentro de DataPoint
+
+COMPILACIÓN Y EJECUCIÓN:
+================================================================================
+
+gcc -o knn_classifier knn_classifier.c -lm -O2 -Wall -Wextra
+
+Flags:
+- -lm: Enlazar librería matemática (para sqrt())
+- -O2: Optimización nivel 2 (balance velocidad/tamaño)
+- -Wall -Wextra: Todos los warnings (código limpio)
+
+./knn_classifier train_data_c.csv test_data_c.csv 5
+
+Argumentos:
+1. train_data_c.csv - Archivo de entrenamiento
+2. test_data_c.csv - Archivo de prueba
+3. 5 - Valor de k (vecinos)
+
+ARCHIVOS GENERADOS:
+================================================================================
+
+1. knn_classifier.c     - Implementación completa (595 líneas)
+2. Makefile             - Script de compilación
+3. train_data_c.csv     - Datos de entrenamiento (generados desde Python)
+4. test_data_c.csv      - Datos de prueba (generados desde Python)
+5. resultados_knn_c.txt - Resultados de ejecución
+
+================================================================================
+TAREA 22 COMPLETADA ✅
+================================================================================

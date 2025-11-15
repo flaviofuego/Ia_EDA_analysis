@@ -1,0 +1,46 @@
+
+================================================================================
+TAREA 21: SELECCIÓN Y JUSTIFICACIÓN DE ALGORITMO
+================================================================================
+
+ALGORITMO SELECCIONADO: K-Nearest Neighbors (KNN)
+
+CRITERIOS DE SELECCIÓN:
+1. Simplicidad de implementación: Alta
+2. Complejidad de entrenamiento: Mínima (O(1))
+3. Estructuras de datos requeridas: Simples (arrays)
+4. Matemáticas requeridas: Básicas (distancia euclidiana)
+5. Facilidad de debugging: Alta
+6. Tiempo de desarrollo estimado: Bajo
+
+CONFIGURACIÓN:
+- K (vecinos): 5
+- Métrica de distancia: Euclidiana (L2)
+- Estrategia de votación: Mayoría simple
+- Features: Top 10 más importantes
+- Dataset: 1,000 observaciones balanceadas
+
+VENTAJAS:
++ No requiere fase de entrenamiento compleja
++ Implementación directa sin optimizaciones complejas
++ Fácil validación paso a paso
++ Comparación directa con sklearn
+
+DESVENTAJAS ACEPTADAS:
+- Complejidad O(n*d) en predicción
+- Sensible a escalamiento (se resolverá con normalización)
+- Uso de memoria (se mitiga con dataset reducido)
+
+ALTERNATIVAS DESCARTADAS Y RAZONES:
+- Logistic Regression: Entrenamiento con gradiente descendente complejo
+- Decision Tree: Algoritmo de construcción y estructuras recursivas complejas
+- Naive Bayes: Estimación de probabilidades y manejo de underflow
+- Perceptron: Limitado a problemas linealmente separables
+
+CONCLUSIÓN:
+KNN es la opción óptima para demostrar comprensión algorítmica profunda
+mediante implementación en C, balanceando simplicidad, efectividad y
+valor educativo.
+
+Puntuación de Implementabilidad: 9.5/10
+================================================================================
