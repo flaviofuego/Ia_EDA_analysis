@@ -1,0 +1,12 @@
+# Archivos a ignorar en el contexto de Docker
+*.o
+*.out
+*.exe
+knn_classifier
+results/
+data/
+.git/
+.gitignore
+*.md
+scripts/
+docker-compose.yml

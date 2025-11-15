@@ -1,8 +1,10 @@
-# 📘 SECCIÓN 6: Implementación en C
+# 📘 SECCIÓN 6: Implementación en C con Docker
 
 ## 🎯 Descripción General
 
 Esta sección implementa un algoritmo de Machine Learning supervisado (K-Nearest Neighbors) en lenguaje C desde cero, demostrando comprensión profunda del funcionamiento interno de los algoritmos de clasificación.
+
+**🐳 NOVEDAD**: La implementación está containerizada con Docker para máxima portabilidad y facilidad de uso. Ver `SECCION6_DOCKER_QUICK_START.md` para inicio rápido.
 
 ---
 
@@ -51,8 +53,10 @@ Esta sección implementa un algoritmo de Machine Learning supervisado (K-Nearest
 
 ---
 
-### ✅ Tarea 23: Implementación Completa en C
+### ✅ Tarea 23: Implementación Completa en C (Containerizada con Docker)
 **Objetivo**: Implementar completamente el algoritmo KNN en C.
+
+**🐳 ENFOQUE MODERNO**: En lugar de código C inline en el notebook, la implementación usa una estructura Docker profesional.
 
 **Características de la Implementación**:
 - ✅ 595 líneas de código C profesional
@@ -63,15 +67,36 @@ Esta sección implementa un algoritmo de Machine Learning supervisado (K-Nearest
 - ✅ Evaluación con múltiples métricas
 - ✅ Matrices de confusión
 - ✅ Métricas por clase (Precision, Recall, F1)
+- ✅ **Containerizada con Docker para portabilidad**
 
-**Archivos Principales**:
-- `knn_classifier.c`: Implementación completa (595 líneas)
-- `Makefile`: Script de compilación
-- `train_data_c.csv`: Datos de entrenamiento (1000 muestras)
-- `test_data_c.csv`: Datos de prueba (300 muestras)
+**Estructura Docker**:
+```
+seccion6_c_docker/
+├── Dockerfile              # Imagen Docker (gcc:13.2.0)
+├── docker-compose.yml      # Orquestación simplificada
+├── README.md              # Documentación completa
+├── src/
+│   ├── knn_classifier.c   # Implementación completa (595 líneas)
+│   └── Makefile           # Script de compilación
+├── data/
+│   ├── train_data_c.csv   # Datos de entrenamiento (generados desde Python)
+│   └── test_data_c.csv    # Datos de prueba (generados desde Python)
+├── results/
+│   └── output.txt         # Resultados de ejecución
+└── scripts/
+    ├── build.sh           # Script para construir imagen
+    └── run.sh             # Script para ejecutar contenedor
+```
 
-**Compilación**:
+**Compilación y Ejecución con Docker** (Recomendado):
 ```bash
+cd seccion6_c_docker
+docker-compose up --build
+```
+
+**Ejecución tradicional** (Sin Docker):
+```bash
+cd seccion6_c_docker/src
 make              # Compilar
 make run          # Compilar y ejecutar
 make test         # Probar con diferentes valores de k
@@ -80,18 +105,25 @@ make clean        # Limpiar archivos compilados
 
 O manualmente:
 ```bash
+cd seccion6_c_docker/src
 gcc -o knn_classifier knn_classifier.c -lm -O2 -Wall -Wextra -std=c99
+./knn_classifier ../data/train_data_c.csv ../data/test_data_c.csv 5
 ```
 
-**Ejecución**:
-```bash
-./knn_classifier train_data_c.csv test_data_c.csv 5
-```
+**Ventajas del Enfoque Docker**:
+- 🐳 **Portabilidad**: Funciona igual en Windows, macOS y Linux
+- 🔄 **Reproducibilidad**: Siempre usa gcc:13.2.0
+- 🔒 **Aislamiento**: No interfiere con el sistema del usuario
+- ⚡ **Facilidad**: No requiere instalar GCC manualmente
+- 🎓 **Profesionalismo**: Enfoque moderno (DevOps)
+- 📦 **Limpieza**: No deja archivos compilados en el repositorio
 
 ---
 
-### ✅ Tarea 24: Evaluación y Comparación Python vs C
+### ✅ Tarea 24: Evaluación y Comparación Python vs C (Integrado con Docker)
 **Objetivo**: Comparar la implementación en C con sklearn (Python).
+
+**Integración Automática**: El notebook ejecuta Docker automáticamente y lee los resultados.
 
 **Métricas Comparadas**:
 1. **Accuracy**: Precisión de clasificación
@@ -99,16 +131,30 @@ gcc -o knn_classifier knn_classifier.c -lm -O2 -Wall -Wextra -std=c99
 3. **Uso de Memoria**: Estimación cualitativa
 4. **Facilidad de Uso**: Análisis subjetivo
 
+**Workflow Integrado**:
+```python
+# El notebook ejecuta automáticamente:
+import subprocess
+result = subprocess.run(['docker-compose', 'up', '--build'], ...)
+
+# Lee resultados desde Docker:
+with open('results/output.txt', 'r') as f:
+    c_results = parse_results(f.read())
+
+# Compara con Python:
+compare_implementations(python_results, c_results)
+```
+
 **Resultados Esperados**:
 - **Accuracy**: Similar (±1-2%)
-- **Velocidad**: Python puede ser más rápido (optimizaciones de sklearn)
-- **Memoria**: C es más eficiente
-- **Facilidad**: Python es mucho más fácil de usar
+- **Velocidad**: Python más rápido (optimizaciones de sklearn)
+- **Memoria**: C más eficiente
+- **Facilidad**: Python mucho más fácil de usar
 
 **Archivos Generados**:
 - `tarea24_comparison_python_vs_c.png`
 - `tarea24_comparacion_completa.txt`
-- `resultados_knn_c.txt` (generado al ejecutar C)
+- `seccion6_c_docker/results/output.txt` (generado por Docker)
 
 ---
 
@@ -144,32 +190,53 @@ gcc -o knn_classifier knn_classifier.c -lm -O2 -Wall -Wextra -std=c99
 ## 🚀 Guía de Uso Rápida
 
 ### Requisitos Previos
-- GCC o compatible (MinGW en Windows)
+- Docker instalado ([Instrucciones de instalación](https://docs.docker.com/get-docker/))
+- Docker Compose instalado (incluido con Docker Desktop)
 - Python 3.8+ (para generar datos)
-- Make (opcional, facilita compilación)
 
-### Paso 1: Generar Datos
+### Paso 1: Generar Datos desde Python
 ```bash
 # Ejecutar notebook de Python (Sección 6, Tarea 23)
+cd notebooks
 jupyter notebook seccion6.ipynb
-# Ejecutar hasta la celda que genera train_data_c.csv y test_data_c.csv
+# Ejecutar celdas hasta que se generen train_data_c.csv y test_data_c.csv
 ```
 
-### Paso 2: Compilar
+### Paso 2: Ejecutar con Docker
 ```bash
+cd ../seccion6_c_docker
+
+# Opción A: Docker Compose (Recomendado)
+docker-compose up --build
+
+# Opción B: Scripts auxiliares
+./scripts/build.sh
+./scripts/run.sh
+
+# Opción C: Docker manual
+docker build -t knn_classifier_c .
+docker run --rm \
+  -v $(pwd)/data:/app/data:ro \
+  -v $(pwd)/results:/app/results:rw \
+  knn_classifier_c
+```
+
+### Paso 3: Ver Resultados
+Los resultados se guardan automáticamente en `results/output.txt` y se muestran en consola.
+
+```bash
+# Ver resultados
+cat results/output.txt
+
+# El notebook de Python los lee automáticamente para comparación
+```
+
+### Alternativa: Compilación Local (Sin Docker)
+```bash
+cd seccion6_c_docker/src
 make
-# O manualmente:
-# gcc -o knn_classifier knn_classifier.c -lm -O2 -Wall
+./knn_classifier ../data/train_data_c.csv ../data/test_data_c.csv 5
 ```
-
-### Paso 3: Ejecutar
-```bash
-./knn_classifier train_data_c.csv test_data_c.csv 5
-```
-
-### Paso 4: Ver Resultados
-Los resultados se muestran en consola y también se guardan en:
-- `resultados_knn_c.txt`
 
 ---
 

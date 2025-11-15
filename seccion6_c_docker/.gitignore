@@ -1,0 +1,16 @@
+# Archivos compilados
+*.o
+*.out
+*.exe
+knn_classifier
+src/knn_classifier
+
+# Archivos de datos (generados desde Python)
+data/*.csv
+
+# Resultados
+results/*.txt
+results/*.csv
+
+# Docker
+.docker/
