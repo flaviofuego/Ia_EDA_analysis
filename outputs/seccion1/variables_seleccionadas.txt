@@ -1,15 +1,15 @@
 VARIABLES SELECCIONADAS PARA MODELADO
 ============================================================
 
-Top 15 variables m醩 influyentes sobre DESEMP_INGLES:
+Top 15 variables m谩s influyentes sobre DESEMP_INGLES:
 
- 1. PUNT_GLOBAL                              (Num閞ica)
- 2. PUNT_C_NATURALES                         (Num閞ica)
- 3. PUNT_LECTURA_CRITICA                     (Num閞ica)
- 4. PUNT_SOCIALES_CIUDADANAS                 (Num閞ica)
- 5. PUNT_MATEMATICAS                         (Num閞ica)
- 6. FAMI_TIENEINTERNET                       (Categ髍ica)
- 7. FAMI_TIENECOMPUTADOR                     (Categ髍ica)
- 8. COLE_NATURALEZA                          (Categ髍ica)
- 9. FAMI_TIENEAUTOMOVIL                      (Categ髍ica)
-10. FAMI_EDUCACIONMADRE                      (Categ髍ica)
+ 1. PUNT_GLOBAL                              (Num茅rica)
+ 2. PUNT_C_NATURALES                         (Num茅rica)
+ 3. PUNT_LECTURA_CRITICA                     (Num茅rica)
+ 4. PUNT_SOCIALES_CIUDADANAS                 (Num茅rica)
+ 5. PUNT_MATEMATICAS                         (Num茅rica)
+ 6. FAMI_TIENEINTERNET                       (Categ贸rica)
+ 7. FAMI_TIENECOMPUTADOR                     (Categ贸rica)
+ 8. COLE_NATURALEZA                          (Categ贸rica)
+ 9. FAMI_TIENEAUTOMOVIL                      (Categ贸rica)
+10. FAMI_EDUCACIONMADRE                      (Categ贸rica)
