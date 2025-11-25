@@ -7,6 +7,10 @@ __pycache__/
 *.so
 *.pkl
 *.csv
+
+# Excepciones: archivos CSV que deben subirse al repositorio
+!data/raw/dataset_saber11_reducido_estratificado.csv
+
 # Distribution / packaging
 .Python
 build/
