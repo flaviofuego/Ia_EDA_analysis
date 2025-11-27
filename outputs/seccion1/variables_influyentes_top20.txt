@@ -1,7 +1,7 @@
-TOP VARIABLES M¡S INFLUYENTES SOBRE DESEMP_INGLES
+TOP VARIABLES M√ÅS INFLUYENTES SOBRE DESEMP_INGLES
 ============================================================
 
-Variables CategÛricas (CramÈr's V):
+Variables Categ√≥ricas (Cram√©r's V):
   - FAMI_TIENEINTERNET
   - FAMI_TIENECOMPUTADOR
   - COLE_NATURALEZA
@@ -13,7 +13,7 @@ Variables CategÛricas (CramÈr's V):
   - COLE_JORNADA
   - COLE_AREA_UBICACION
 
-Variables NumÈricas (CorrelaciÛn):
+Variables Num√©ricas (Correlaci√≥n):
   - PUNT_GLOBAL
   - PUNT_C_NATURALES
   - PUNT_LECTURA_CRITICA
