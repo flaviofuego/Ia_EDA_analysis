@@ -2,45 +2,34 @@ RESUMEN SECCIÓN 4: APRENDIZAJE SUPERVISADO
 ================================================================================
 
 
-✅ APRENDIZAJE SUPERVISADO COMPLETADO
-
 TAREA 13: Entrenamiento de Modelos
    • Modelos entrenados: 5
    • Algoritmos: Decision Tree, Random Forest, Logistic Regression, SVM, KNN
-   • Tiempo total de entrenamiento: 26.40s
+   • Tiempo total de entrenamiento: 36.58s
 
 TAREA 14: Comparación y Evaluación
    • Mejor modelo (F1-Score): Logistic Regression
-   • F1-Score máximo: 0.9309
-   • Accuracy máximo: 0.9333
+   • F1-Score máximo: 0.9314
+   • Accuracy máximo: 0.9336
    • Métricas calculadas: Accuracy, Precision, Recall, F1-Score
    • Matrices de confusión generadas para todos los modelos
 
 TAREA 15: Validación Cruzada
    • Método: 5-Fold Stratified Cross-Validation
    • Modelo más estable: Logistic Regression
-   • Menor desviación estándar: 0.00095
+   • Menor desviación estándar: 0.00173
    • Análisis de overfitting realizado
 
 TAREA 16: Ajuste de Hiperparámetros
-   • Modelos optimizados: 2
+   • Modelos optimizados: 1
    • Métodos: Grid Search y Random Search
-   • Mejora promedio en F1-Score: 0.0138
+   • Mejora promedio en F1-Score: 0.0259
 
 TAREA 17: Feature Importance
    • Top features identificadas y consensuadas
    • Análisis de coeficientes de regresión logística
    • Estructura del árbol de decisión visualizada
-   • Features para 90% de importancia: 6
-
-ARCHIVOS GENERADOS:
-   ✓ model_comparison_metrics.png
-   ✓ confusion_matrices.png
-   ✓ cross_validation_analysis.png
-   ✓ hyperparameter_tuning_comparison.png
-   ✓ feature_importance_*.png
-   ✓ tuned_models.pkl
-   ✓ feature_importance_analysis.pkl
+   • Features para 90% de importancia: 8
 
 CONCLUSIONES Y RECOMENDACIONES:
 
@@ -56,11 +45,3 @@ CONCLUSIONES Y RECOMENDACIONES:
    • Traslape entre clases intermedias (A1, A2, B1)
    • Desbalance de clases afecta métricas de clases minoritarias
    • Algunos modelos muestran signos leves de overfitting
-
-4. PRÓXIMOS PASOS (Sección 5):
-   • Implementar técnicas de balanceo (SMOTE)
-   • Probar ensemble methods avanzados
-   • Feature engineering adicional
-   • Regularización para reducir overfitting
-
-PRÓXIMA SECCIÓN: Sección 5 - Evaluación e Interpretación
