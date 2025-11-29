@@ -5,7 +5,7 @@ RESUMEN SECCIÓN 4: APRENDIZAJE SUPERVISADO
 TAREA 13: Entrenamiento de Modelos
    • Modelos entrenados: 5
    • Algoritmos: Decision Tree, Random Forest, Logistic Regression, SVM, KNN
-   • Tiempo total de entrenamiento: 36.58s
+   • Tiempo total de entrenamiento: 39.79s
 
 TAREA 14: Comparación y Evaluación
    • Mejor modelo (F1-Score): Logistic Regression
