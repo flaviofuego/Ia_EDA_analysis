@@ -5,40 +5,40 @@ RESUMEN SECCIÓN 4: APRENDIZAJE SUPERVISADO
 TAREA 13: Entrenamiento de Modelos
    • Modelos entrenados: 5
    • Algoritmos: Decision Tree, Random Forest, Logistic Regression, SVM, KNN
-   • Tiempo total de entrenamiento: 39.79s
+   • Tiempo total de entrenamiento: 33.64s
 
 TAREA 14: Comparación y Evaluación
-   • Mejor modelo (F1-Score): Logistic Regression
-   • F1-Score máximo: 0.9314
-   • Accuracy máximo: 0.9336
+   • Mejor modelo (F1-Score): KNN
+   • F1-Score máximo: 0.6494
+   • Accuracy máximo: 0.6554
    • Métricas calculadas: Accuracy, Precision, Recall, F1-Score
    • Matrices de confusión generadas para todos los modelos
 
 TAREA 15: Validación Cruzada
    • Método: 5-Fold Stratified Cross-Validation
-   • Modelo más estable: Logistic Regression
-   • Menor desviación estándar: 0.00173
+   • Modelo más estable: KNN
+   • Menor desviación estándar: 0.00078
    • Análisis de overfitting realizado
 
 TAREA 16: Ajuste de Hiperparámetros
    • Modelos optimizados: 1
    • Métodos: Grid Search y Random Search
-   • Mejora promedio en F1-Score: 0.0259
+   • Mejora promedio en F1-Score: 0.0000
 
 TAREA 17: Feature Importance
    • Top features identificadas y consensuadas
    • Análisis de coeficientes de regresión logística
    • Estructura del árbol de decisión visualizada
-   • Features para 90% de importancia: 8
+   • Features para 90% de importancia: 9
 
 CONCLUSIONES Y RECOMENDACIONES:
 
 1. RENDIMIENTO GENERAL:
    Los modelos supervisados logran buenos resultados en la clasificación del
-   nivel de inglés, con F1-Scores superiores a 0.66.
+   nivel de inglés, con F1-Scores superiores a 0.62.
 
 2. MODELO RECOMENDADO:
-   Logistic Regression muestra el mejor balance entre precisión,
+   KNN muestra el mejor balance entre precisión,
    estabilidad y tiempo de entrenamiento.
 
 3. DESAFÍOS IDENTIFICADOS:

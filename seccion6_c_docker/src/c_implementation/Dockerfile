@@ -21,21 +21,13 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copiar código fuente
-COPY src/ /app/src/
+COPY knn_classifier.c /app/
 
 # Crear directorios para datos y resultados
 RUN mkdir -p /app/data /app/results
 
-# Compilar el programa
-WORKDIR /app/src
-RUN make clean || true
-RUN make
-
-# Copiar el ejecutable al directorio principal
-RUN cp knn_classifier /app/
-
-# Volver al directorio principal
-WORKDIR /app
+# Compilar el programa directamente con gcc
+RUN gcc -Wall -Wextra -O2 -std=c99 -o knn_classifier knn_classifier.c -lm
 
 # Script de ejecución por defecto
 CMD ["./knn_classifier", "data/train_data_c.csv", "data/test_data_c.csv", "5"]

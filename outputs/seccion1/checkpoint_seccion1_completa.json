@@ -1,6 +1,5 @@
 {
   "variables_numericas_top": [
-    "PUNT_GLOBAL",
     "PUNT_C_NATURALES",
     "PUNT_LECTURA_CRITICA",
     "PUNT_SOCIALES_CIUDADANAS",
@@ -19,7 +18,6 @@
     "COLE_AREA_UBICACION"
   ],
   "variables_seleccionadas_modelado": [
-    "PUNT_GLOBAL",
     "PUNT_C_NATURALES",
     "PUNT_LECTURA_CRITICA",
     "PUNT_SOCIALES_CIUDADANAS",
@@ -33,7 +31,8 @@
     "FAMI_TIENELAVADORA",
     "FAMI_ESTRATOVIVIENDA",
     "COLE_JORNADA",
-    "COLE_AREA_UBICACION"
+    "COLE_AREA_UBICACION",
+    "ESTU_TIPODOCUMENTO"
   ],
   "n_variables_total": 15
 }

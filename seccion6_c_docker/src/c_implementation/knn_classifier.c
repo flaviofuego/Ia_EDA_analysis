@@ -120,7 +120,7 @@ int majority_vote(Neighbor* neighbors, int k, int n_classes) {
     // Inicializar contadores de votos
     int* votes = (int*)calloc(n_classes, sizeof(int));
     if (votes == NULL) {
-        fprintf(stderr, "Error: No se pudo asignar memoria para votos\\n");
+        fprintf(stderr, "Error: No se pudo asignar memoria para votos\n");
         return -1;
     }
     
@@ -161,7 +161,7 @@ int majority_vote(Neighbor* neighbors, int k, int n_classes) {
 Dataset* load_dataset(const char* filename, int* n_features, int* n_classes) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
-        fprintf(stderr, "Error: No se pudo abrir el archivo %s\\n", filename);
+        fprintf(stderr, "Error: No se pudo abrir el archivo %s\n", filename);
         return NULL;
     }
     
@@ -171,7 +171,7 @@ Dataset* load_dataset(const char* filename, int* n_features, int* n_classes) {
     
     // Leer primera línea (header)
     if (fgets(line, MAX_LINE_LENGTH, file) == NULL) {
-        fprintf(stderr, "Error: Archivo vacío\\n");
+        fprintf(stderr, "Error: Archivo vacío\n");
         fclose(file);
         return NULL;
     }
@@ -194,7 +194,7 @@ Dataset* load_dataset(const char* filename, int* n_features, int* n_classes) {
     }
     
     if (n_samples == 0) {
-        fprintf(stderr, "Error: No hay datos en el archivo\\n");
+        fprintf(stderr, "Error: No hay datos en el archivo\n");
         fclose(file);
         return NULL;
     }
@@ -202,14 +202,14 @@ Dataset* load_dataset(const char* filename, int* n_features, int* n_classes) {
     // Crear dataset
     Dataset* dataset = (Dataset*)malloc(sizeof(Dataset));
     if (dataset == NULL) {
-        fprintf(stderr, "Error: No se pudo asignar memoria para dataset\\n");
+        fprintf(stderr, "Error: No se pudo asignar memoria para dataset\n");
         fclose(file);
         return NULL;
     }
     
     dataset->data = (DataPoint*)malloc(n_samples * sizeof(DataPoint));
     if (dataset->data == NULL) {
-        fprintf(stderr, "Error: No se pudo asignar memoria para datos\\n");
+        fprintf(stderr, "Error: No se pudo asignar memoria para datos\n");
         free(dataset);
         fclose(file);
         return NULL;
@@ -269,17 +269,17 @@ void free_dataset(Dataset* dataset) {
  */
 void print_dataset_info(Dataset* dataset) {
     if (dataset == NULL) {
-        printf("Dataset es NULL\\n");
+        printf("Dataset es NULL\n");
         return;
     }
     
-    printf("\\n╔════════════════════════════════════════╗\\n");
-    printf("║      INFORMACIÓN DEL DATASET           ║\\n");
-    printf("╚════════════════════════════════════════╝\\n");
-    printf("  Muestras:        %d\\n", dataset->n_samples);
-    printf("  Features:        %d\\n", dataset->n_features);
-    printf("  Clases:          %d\\n", dataset->n_classes);
-    printf("\\n");
+    printf("\n╔════════════════════════════════════════╗\n");
+    printf("║      INFORMACIÓN DEL DATASET           ║\n");
+    printf("╚════════════════════════════════════════╝\n");
+    printf("  Muestras:        %d\n", dataset->n_samples);
+    printf("  Features:        %d\n", dataset->n_features);
+    printf("  Clases:          %d\n", dataset->n_classes);
+    printf("\n");
 }
 
 /* ========================================================================
@@ -295,7 +295,7 @@ void print_dataset_info(Dataset* dataset) {
 KNNModel* create_knn_model(int k) {
     KNNModel* model = (KNNModel*)malloc(sizeof(KNNModel));
     if (model == NULL) {
-        fprintf(stderr, "Error: No se pudo asignar memoria para modelo\\n");
+        fprintf(stderr, "Error: No se pudo asignar memoria para modelo\n");
         return NULL;
     }
     
@@ -324,7 +324,7 @@ void knn_fit(KNNModel* model, Dataset* training_data) {
  */
 int knn_predict_single(KNNModel* model, const double* test_point) {
     if (model->training_data == NULL) {
-        fprintf(stderr, "Error: Modelo no entrenado\\n");
+        fprintf(stderr, "Error: Modelo no entrenado\n");
         return -1;
     }
     
@@ -334,7 +334,7 @@ int knn_predict_single(KNNModel* model, const double* test_point) {
     // Crear array de vecinos
     Neighbor* all_neighbors = (Neighbor*)malloc(train->n_samples * sizeof(Neighbor));
     if (all_neighbors == NULL) {
-        fprintf(stderr, "Error: No se pudo asignar memoria para vecinos\\n");
+        fprintf(stderr, "Error: No se pudo asignar memoria para vecinos\n");
         return -1;
     }
     
@@ -355,7 +355,7 @@ int knn_predict_single(KNNModel* model, const double* test_point) {
     // Tomar los k más cercanos
     Neighbor* k_neighbors = (Neighbor*)malloc(k * sizeof(Neighbor));
     if (k_neighbors == NULL) {
-        fprintf(stderr, "Error: No se pudo asignar memoria para k vecinos\\n");
+        fprintf(stderr, "Error: No se pudo asignar memoria para k vecinos\n");
         free(all_neighbors);
         return -1;
     }
@@ -381,7 +381,7 @@ int knn_predict_single(KNNModel* model, const double* test_point) {
  * @param predictions Array para almacenar predicciones (output)
  */
 void knn_predict(KNNModel* model, Dataset* test_data, int* predictions) {
-    printf("\\nRealizando predicciones...\\n");
+    printf("\nRealizando predicciones...\n");
     printf("[");
     
     int progress_step = test_data->n_samples / 50;
@@ -397,7 +397,7 @@ void knn_predict(KNNModel* model, Dataset* test_data, int* predictions) {
         }
     }
     
-    printf("] 100%%\\n");
+    printf("] 100%%\n");
 }
 
 /**
@@ -459,28 +459,28 @@ void print_confusion_matrix(const int* y_true, const int* y_pred,
     }
     
     // Imprimir matriz
-    printf("\\n╔════════════════════════════════════════╗\\n");
-    printf("║      MATRIZ DE CONFUSIÓN               ║\\n");
-    printf("╚════════════════════════════════════════╝\\n\\n");
+    printf("\n╔════════════════════════════════════════╗\n");
+    printf("║      MATRIZ DE CONFUSIÓN               ║\n");
+    printf("╚════════════════════════════════════════╝\n\n");
     printf("         ");
     for (int i = 0; i < n_classes; i++) {
         printf("C%-2d  ", i);
     }
-    printf("\\n");
+    printf("\n");
     printf("      ");
     for (int i = 0; i < n_classes; i++) {
         printf("-----");
     }
-    printf("\\n");
+    printf("\n");
     
     for (int i = 0; i < n_classes; i++) {
         printf("C%-2d |  ", i);
         for (int j = 0; j < n_classes; j++) {
             printf("%4d ", matrix[i][j]);
         }
-        printf("\\n");
+        printf("\n");
     }
-    printf("\\n");
+    printf("\n");
     
     // Liberar matriz
     for (int i = 0; i < n_classes; i++) {
@@ -499,11 +499,11 @@ void print_confusion_matrix(const int* y_true, const int* y_pred,
  */
 void print_per_class_metrics(const int* y_true, const int* y_pred,
                              int n_samples, int n_classes) {
-    printf("\\n╔════════════════════════════════════════╗\\n");
-    printf("║      MÉTRICAS POR CLASE                ║\\n");
-    printf("╚════════════════════════════════════════╝\\n\\n");
-    printf("Clase  Precisión  Recall    F1-Score\\n");
-    printf("─────────────────────────────────────────\\n");
+    printf("\n╔════════════════════════════════════════╗\n");
+    printf("║      MÉTRICAS POR CLASE                ║\n");
+    printf("╚════════════════════════════════════════╝\n\n");
+    printf("Clase  Precisión  Recall    F1-Score\n");
+    printf("─────────────────────────────────────────\n");
     
     for (int c = 0; c < n_classes; c++) {
         int tp = 0, fp = 0, fn = 0;
@@ -519,9 +519,9 @@ void print_per_class_metrics(const int* y_true, const int* y_pred,
         double f1 = (precision + recall > 0) ? 
                     2 * precision * recall / (precision + recall) : 0.0;
         
-        printf("  %d     %.4f    %.4f    %.4f\\n", c, precision, recall, f1);
+        printf("  %d     %.4f    %.4f    %.4f\n", c, precision, recall, f1);
     }
-    printf("\\n");
+    printf("\n");
 }
 
 /* ========================================================================
@@ -529,19 +529,19 @@ void print_per_class_metrics(const int* y_true, const int* y_pred,
  * ======================================================================== */
 
 int main(int argc, char* argv[]) {
-    printf("\\n");
-    printf("╔═══════════════════════════════════════════════════════════════════╗\\n");
-    printf("║    K-NEAREST NEIGHBORS (KNN) CLASSIFIER - IMPLEMENTACIÓN EN C     ║\\n");
-    printf("║                                                                    ║\\n");
-    printf("║    Universidad del Norte - Inteligencia Artificial (ELP 8012)     ║\\n");
-    printf("║    Proyecto: Predicción de Desempeño en Inglés - Saber 11         ║\\n");
-    printf("╚═══════════════════════════════════════════════════════════════════╝\\n");
-    printf("\\n");
+    printf("\n");
+    printf("╔═══════════════════════════════════════════════════════════════════╗\n");
+    printf("║    K-NEAREST NEIGHBORS (KNN) CLASSIFIER - IMPLEMENTACIÓN EN C     ║\n");
+    printf("║                                                                    ║\n");
+    printf("║    Universidad del Norte - Inteligencia Artificial (ELP 8012)     ║\n");
+    printf("║    Proyecto: Predicción de Desempeño en Inglés - Saber 11         ║\n");
+    printf("╚═══════════════════════════════════════════════════════════════════╝\n");
+    printf("\n");
     
     // Verificar argumentos
     if (argc < 4) {
-        printf("Uso: %s <train.csv> <test.csv> <k>\\n", argv[0]);
-        printf("Ejemplo: %s train_data_c.csv test_data_c.csv 5\\n", argv[0]);
+        printf("Uso: %s <train.csv> <test.csv> <k>\n", argv[0]);
+        printf("Ejemplo: %s train_data_c.csv test_data_c.csv 5\n", argv[0]);
         return 1;
     }
     
@@ -550,56 +550,56 @@ int main(int argc, char* argv[]) {
     int k = atoi(argv[3]);
     
     if (k <= 0) {
-        fprintf(stderr, "Error: k debe ser un número positivo\\n");
+        fprintf(stderr, "Error: k debe ser un número positivo\n");
         return 1;
     }
     
-    printf("Parámetros:\\n");
-    printf("  Archivo de entrenamiento: %s\\n", train_file);
-    printf("  Archivo de prueba: %s\\n", test_file);
-    printf("  K (vecinos): %d\\n", k);
-    printf("\\n");
+    printf("Parámetros:\n");
+    printf("  Archivo de entrenamiento: %s\n", train_file);
+    printf("  Archivo de prueba: %s\n", test_file);
+    printf("  K (vecinos): %d\n", k);
+    printf("\n");
     
     // Medir tiempo de inicio
     clock_t start_time = clock();
     
     // Cargar datos de entrenamiento
-    printf("📂 Cargando datos de entrenamiento...\\n");
+    printf("📂 Cargando datos de entrenamiento...\n");
     int n_features, n_classes;
     Dataset* train_data = load_dataset(train_file, &n_features, &n_classes);
     
     if (train_data == NULL) {
-        fprintf(stderr, "Error al cargar datos de entrenamiento\\n");
+        fprintf(stderr, "Error al cargar datos de entrenamiento\n");
         return 1;
     }
     
-    printf("✅ Datos de entrenamiento cargados:\\n");
+    printf("✅ Datos de entrenamiento cargados:\n");
     print_dataset_info(train_data);
     
     // Cargar datos de prueba
-    printf("📂 Cargando datos de prueba...\\n");
+    printf("📂 Cargando datos de prueba...\n");
     int test_n_features, test_n_classes;
     Dataset* test_data = load_dataset(test_file, &test_n_features, &test_n_classes);
     
     if (test_data == NULL) {
-        fprintf(stderr, "Error al cargar datos de prueba\\n");
+        fprintf(stderr, "Error al cargar datos de prueba\n");
         free_dataset(train_data);
         return 1;
     }
     
-    printf("✅ Datos de prueba cargados:\\n");
+    printf("✅ Datos de prueba cargados:\n");
     print_dataset_info(test_data);
     
     // Verificar compatibilidad
     if (n_features != test_n_features) {
-        fprintf(stderr, "Error: Número de features no coincide\\n");
+        fprintf(stderr, "Error: Número de features no coincide\n");
         free_dataset(train_data);
         free_dataset(test_data);
         return 1;
     }
     
     // Crear y entrenar modelo
-    printf("🔧 Creando modelo KNN con k=%d...\\n", k);
+    printf("🔧 Creando modelo KNN con k=%d...\n", k);
     KNNModel* model = create_knn_model(k);
     
     if (model == NULL) {
@@ -608,16 +608,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    printf("🎯 Entrenando modelo...\\n");
+    printf("🎯 Entrenando modelo...\n");
     knn_fit(model, train_data);
-    printf("✅ Modelo entrenado\\n");
+    printf("✅ Modelo entrenado\n");
     
     // Realizar predicciones
     clock_t pred_start = clock();
     int* predictions = (int*)malloc(test_data->n_samples * sizeof(int));
     
     if (predictions == NULL) {
-        fprintf(stderr, "Error al asignar memoria para predicciones\\n");
+        fprintf(stderr, "Error al asignar memoria para predicciones\n");
         free_knn_model(model);
         free_dataset(train_data);
         free_dataset(test_data);
@@ -628,11 +628,11 @@ int main(int argc, char* argv[]) {
     clock_t pred_end = clock();
     
     double pred_time = (double)(pred_end - pred_start) / CLOCKS_PER_SEC;
-    printf("✅ Predicciones completadas en %.2f segundos\\n", pred_time);
+    printf("✅ Predicciones completadas en %.2f segundos\n", pred_time);
     
     // Evaluar resultados
-    printf("\\n📊 EVALUANDO RESULTADOS\\n");
-    printf("════════════════════════════════════════\\n");
+    printf("\n📊 EVALUANDO RESULTADOS\n");
+    printf("════════════════════════════════════════\n");
     
     // Extraer etiquetas verdaderas
     int* y_true = (int*)malloc(test_data->n_samples * sizeof(int));
@@ -643,15 +643,15 @@ int main(int argc, char* argv[]) {
     // Calcular accuracy
     double accuracy = calculate_accuracy(y_true, predictions, test_data->n_samples);
     
-    printf("\\n╔════════════════════════════════════════╗\\n");
-    printf("║      RESULTADOS GENERALES              ║\\n");
-    printf("╚════════════════════════════════════════╝\\n");
-    printf("  Accuracy:              %.2f%%\\n", accuracy * 100);
-    printf("  Total de muestras:     %d\\n", test_data->n_samples);
-    printf("  Predicciones correctas: %d\\n", (int)(accuracy * test_data->n_samples));
-    printf("  Predicciones incorrectas: %d\\n", 
+    printf("\n╔════════════════════════════════════════╗\n");
+    printf("║      RESULTADOS GENERALES              ║\n");
+    printf("╚════════════════════════════════════════╝\n");
+    printf("  Accuracy:              %.2f%%\n", accuracy * 100);
+    printf("  Total de muestras:     %d\n", test_data->n_samples);
+    printf("  Predicciones correctas: %d\n", (int)(accuracy * test_data->n_samples));
+    printf("  Predicciones incorrectas: %d\n", 
            test_data->n_samples - (int)(accuracy * test_data->n_samples));
-    printf("\\n");
+    printf("\n");
     
     // Mostrar matriz de confusión
     print_confusion_matrix(y_true, predictions, test_data->n_samples, n_classes);
@@ -663,29 +663,31 @@ int main(int argc, char* argv[]) {
     clock_t end_time = clock();
     double total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     
-    printf("╔════════════════════════════════════════╗\\n");
-    printf("║      TIEMPO DE EJECUCIÓN               ║\\n");
-    printf("╚════════════════════════════════════════╝\\n");
-    printf("  Tiempo total:      %.2f segundos\\n", total_time);
-    printf("  Tiempo predicción: %.2f segundos\\n", pred_time);
-    printf("  Tiempo por muestra: %.4f segundos\\n", pred_time / test_data->n_samples);
-    printf("\\n");
+    printf("╔════════════════════════════════════════╗\n");
+    printf("║      TIEMPO DE EJECUCIÓN               ║\n");
+    printf("╚════════════════════════════════════════╝\n");
+    printf("  Tiempo total:      %.2f segundos\n", total_time);
+    printf("  Tiempo predicción: %.2f segundos\n", pred_time);
+    printf("  Tiempo por muestra: %.4f segundos\n", pred_time / test_data->n_samples);
+    printf("\n");
     
-    // Guardar resultados
-    FILE* results_file = fopen("resultados_knn_c.txt", "w");
+    // Guardar resultados en directorio results/
+    FILE* results_file = fopen("results/resultados_knn_c.txt", "w");
     if (results_file != NULL) {
-        fprintf(results_file, "RESULTADOS KNN EN C\\n");
-        fprintf(results_file, "==================\\n\\n");
-        fprintf(results_file, "K: %d\\n", k);
-        fprintf(results_file, "Muestras de entrenamiento: %d\\n", train_data->n_samples);
-        fprintf(results_file, "Muestras de prueba: %d\\n", test_data->n_samples);
-        fprintf(results_file, "Features: %d\\n", n_features);
-        fprintf(results_file, "Clases: %d\\n\\n", n_classes);
-        fprintf(results_file, "Accuracy: %.4f\\n", accuracy);
-        fprintf(results_file, "Tiempo de predicción: %.2f segundos\\n", pred_time);
-        fprintf(results_file, "Tiempo total: %.2f segundos\\n", total_time);
+        fprintf(results_file, "RESULTADOS KNN EN C\n");
+        fprintf(results_file, "==================\n\n");
+        fprintf(results_file, "K: %d\n", k);
+        fprintf(results_file, "Muestras de entrenamiento: %d\n", train_data->n_samples);
+        fprintf(results_file, "Muestras de prueba: %d\n", test_data->n_samples);
+        fprintf(results_file, "Features: %d\n", n_features);
+        fprintf(results_file, "Clases: %d\n\n", n_classes);
+        fprintf(results_file, "Accuracy: %.4f\n", accuracy);
+        fprintf(results_file, "Tiempo de predicción: %.2f segundos\n", pred_time);
+        fprintf(results_file, "Tiempo total: %.2f segundos\n", total_time);
         fclose(results_file);
-        printf("✅ Resultados guardados en: resultados_knn_c.txt\\n");
+        printf("✅ Resultados guardados en: results/resultados_knn_c.txt\n");
+    } else {
+        fprintf(stderr, "⚠️  No se pudo crear archivo de resultados\n");
     }
     
     // Liberar memoria
@@ -695,7 +697,7 @@ int main(int argc, char* argv[]) {
     free_dataset(train_data);
     free_dataset(test_data);
     
-    printf("\\n✅ Programa finalizado exitosamente\\n\\n");
+    printf("\n✅ Programa finalizado exitosamente\n\n");
     
     return 0;
 }
