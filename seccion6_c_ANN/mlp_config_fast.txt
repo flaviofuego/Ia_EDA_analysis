@@ -1,0 +1,18 @@
+# Configuración RÁPIDA del Perceptrón Multicapa
+# Para pruebas rápidas y desarrollo
+
+epochs=50
+batch_size=128
+learning_rate=0.02
+lr_decay=0.95
+
+momentum=0.9
+weight_decay=0.0001
+
+early_stopping_patience=10
+min_delta=0.001
+
+hidden_layers=15,8
+
+seed=42
+verbose=1

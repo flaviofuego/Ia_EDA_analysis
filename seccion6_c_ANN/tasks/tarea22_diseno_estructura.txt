@@ -1,0 +1,597 @@
+================================================================================
+TAREA 22: DISEÑO DE ESTRUCTURA DE DATOS Y FUNCIONES
+================================================================================
+
+
+1. ESTRUCTURAS DE DATOS PRINCIPALES
+================================================================================
+
+1.1. DATOS DE ENTRADA Y ETIQUETAS
+--------------------------------------------------------------------------------
+
+typedef struct {
+    double* features;      // Array dinámico de features
+    int num_features;      // Número de features
+    int label;            // Etiqueta (0-4 para 5 clases)
+} DataPoint;
+
+typedef struct {
+    DataPoint* data;       // Array de puntos de datos
+    int num_samples;       // Número de muestras
+    int num_features;      // Número de features
+    int num_classes;       // Número de clases
+    double* feature_means; // Media de cada feature (normalización)
+    double* feature_stds;  // Desviación estándar (normalización)
+} Dataset;
+
+
+1.2. ARQUITECTURA DE LA RED NEURONAL
+--------------------------------------------------------------------------------
+
+typedef struct {
+    int num_neurons;       // Número de neuronas en esta capa
+    int num_inputs;        // Número de inputs de la capa anterior
+    double** weights;      // Matriz de pesos [num_neurons][num_inputs]
+    double* biases;        // Vector de biases [num_neurons]
+    double* outputs;       // Salidas de activación [num_neurons]
+    double* pre_activation;// Valores pre-activación (z) [num_neurons]
+    double* deltas;        // Gradientes para backprop [num_neurons]
+    double** weight_grads; // Gradientes de pesos [num_neurons][num_inputs]
+    double* bias_grads;    // Gradientes de biases [num_neurons]
+    char activation[16];   // Tipo de activación: "relu", "sigmoid", "softmax"
+} Layer;
+
+typedef struct {
+    Layer** layers;        // Array de capas
+    int num_layers;        // Número total de capas (incluyendo input/output)
+    int input_size;        // Tamaño de entrada
+    int output_size;       // Tamaño de salida (clases)
+    double learning_rate;  // Tasa de aprendizaje
+    double momentum;       // Momento para SGD
+    double weight_decay;   // Regularización L2
+    double** velocity_w;   // Velocidad para momentum en pesos
+    double** velocity_b;   // Velocidad para momentum en biases
+} MLP;
+
+
+1.3. CONFIGURACIÓN DE ENTRENAMIENTO
+--------------------------------------------------------------------------------
+
+typedef struct {
+    int epochs;            // Número de épocas de entrenamiento
+    int batch_size;        // Tamaño de mini-batch
+    double learning_rate;  // Learning rate inicial
+    double lr_decay;       // Factor de decay por época
+    double momentum;       // Momentum para SGD
+    double weight_decay;   // Regularización L2
+    int early_stopping;    // Epochs sin mejora antes de detener
+    double min_delta;      // Mejora mínima para early stopping
+    int verbose;           // Nivel de verbosidad (0, 1, 2)
+    unsigned int seed;     // Semilla para reproducibilidad
+} TrainConfig;
+
+
+1.4. MÉTRICAS DE EVALUACIÓN
+--------------------------------------------------------------------------------
+
+typedef struct {
+    double accuracy;       // Exactitud global
+    double balanced_acc;   // Balanced accuracy
+    double f1_weighted;    // F1-score ponderado
+    double precision;      // Precisión promedio
+    double recall;         // Recall promedio
+    int** confusion_matrix;// Matriz de confusión [num_classes][num_classes]
+    double* per_class_acc; // Accuracy por clase
+    int num_classes;       // Número de clases
+} Metrics;
+
+
+================================================================================
+2. FUNCIONES PRINCIPALES DEL PROGRAMA
+================================================================================
+
+2.1. MÓDULO: DATA_UTILS (data_utils.c/h)
+--------------------------------------------------------------------------------
+
+Dataset* load_dataset(const char* filename, int num_features, int num_classes);
+   Input: Archivo CSV, número de features y clases
+   Output: Dataset cargado en memoria
+   Proceso:
+   1. Abrir archivo y contar líneas
+   2. Asignar memoria para Dataset
+   3. Parsear cada línea: features y label
+   4. Validar integridad de datos
+
+void normalize_dataset(Dataset* dataset);
+   Input: Dataset con datos crudos
+   Output: Dataset normalizado (z-score)
+   Proceso:
+   1. Calcular media y std de cada feature
+   2. Aplicar: x_norm = (x - mean) / std
+   3. Guardar parámetros para test set
+
+void split_dataset(Dataset* dataset, Dataset** train, Dataset** test, 
+                   double test_ratio, unsigned int seed);
+   Input: Dataset completo, ratio de test, semilla
+   Output: Dataset dividido en train y test
+   Proceso:
+   1. Calcular tamaños de train/test
+   2. Shuffle con semilla fija
+   3. Asignar primeros N a train, resto a test
+   4. Copiar parámetros de normalización
+
+void shuffle_dataset(Dataset* dataset, unsigned int seed);
+   Input: Dataset, semilla
+   Output: Dataset con orden aleatorio
+   Proceso: Fisher-Yates shuffle
+
+void free_dataset(Dataset* dataset);
+   Input: Dataset a liberar
+   Proceso: Liberar memoria de arrays dinámicos
+
+
+2.2. MÓDULO: MLP_CORE (mlp_core.c/h)
+--------------------------------------------------------------------------------
+
+MLP* create_mlp(int input_size, int* layer_sizes, int num_layers, 
+                const char** activations, double learning_rate);
+   Input: Dimensiones de capas y configuración
+   Output: MLP inicializada
+   Proceso:
+   1. Asignar memoria para estructura MLP
+   2. Crear cada capa con create_layer()
+   3. Inicializar pesos (Xavier/He según activación)
+   4. Inicializar velocities para momentum
+
+Layer* create_layer(int num_neurons, int num_inputs, const char* activation);
+   Input: Dimensiones y tipo de activación
+   Output: Capa inicializada
+   Proceso:
+   1. Asignar memoria para Layer
+   2. Inicializar pesos aleatoriamente
+   3. Inicializar biases a 0
+   4. Asignar arrays de trabajo
+
+void initialize_weights(Layer* layer, const char* method);
+   Input: Capa, método (xavier/he)
+   Output: Pesos inicializados
+   Proceso:
+   - Xavier: W ~ U(-√(6/(n_in+n_out)), √(6/(n_in+n_out)))
+   - He: W ~ N(0, √(2/n_in))
+
+void free_mlp(MLP* mlp);
+   Input: MLP a liberar
+   Proceso: Liberar todas las capas y arrays
+
+
+2.3. MÓDULO: ACTIVATION (activation.c/h)
+--------------------------------------------------------------------------------
+
+void apply_activation(double* inputs, double* outputs, int size, 
+                      const char* activation);
+   Input: Vector, tamaño, tipo de activación
+   Output: Vector activado
+   Implementa: relu, sigmoid, tanh, softmax
+
+void apply_activation_derivative(double* outputs, double* derivatives, 
+                                 int size, const char* activation);
+   Input: Salidas de activación, tipo
+   Output: Derivadas para backprop
+   Implementa:
+   - ReLU: d/dx = 1 if x>0, else 0
+   - Sigmoid: d/dx = σ(x)(1-σ(x))
+   - Tanh: d/dx = 1 - tanh²(x)
+   - Softmax: se maneja en backprop con cross-entropy
+
+
+2.4. MÓDULO: FORWARD (forward.c/h)
+--------------------------------------------------------------------------------
+
+void forward_pass(MLP* mlp, double* input);
+   Input: MLP, vector de input
+   Output: MLP con outputs calculados en todas las capas
+   Proceso:
+   1. Copiar input a primera capa
+   2. Para cada capa:
+      a. z = W·x + b
+      b. a = activation(z)
+   3. Output layer usa softmax para probabilidades
+
+void forward_layer(Layer* layer, double* input);
+   Input: Capa, input de capa anterior
+   Output: Capa con outputs calculados
+   Proceso:
+   1. Multiplicación matriz-vector: z = W·x + b
+   2. Aplicar función de activación: a = f(z)
+   3. Guardar z y a para backprop
+
+
+2.5. MÓDULO: BACKWARD (backward.c/h)
+--------------------------------------------------------------------------------
+
+void backward_pass(MLP* mlp, int true_label);
+   Input: MLP (con forward ya ejecutado), etiqueta real
+   Output: MLP con gradientes calculados
+   Proceso:
+   1. Calcular delta output: δ_out = pred - one_hot(label)
+   2. Para cada capa desde output a input:
+      a. Calcular δ_l = f'(z_l) ⊙ (W_{l+1}^T · δ_{l+1})
+      b. Calcular ∇W_l = δ_l · a_{l-1}^T
+      c. Calcular ∇b_l = δ_l
+   3. Acumular gradientes para batch
+
+void backward_layer(Layer* current, Layer* next, double* prev_outputs);
+   Input: Capa actual, siguiente, outputs previos
+   Output: Gradientes calculados en current
+   Proceso:
+   1. Si es última capa: δ = output - target
+   2. Si no: δ = f'(z) ⊙ (W_next^T · δ_next)
+   3. ∇W = δ · prev_outputs^T
+   4. ∇b = δ
+
+
+2.6. MÓDULO: OPTIMIZER (optimizer.c/h)
+--------------------------------------------------------------------------------
+
+void update_weights_sgd(MLP* mlp, int batch_size);
+   Input: MLP con gradientes acumulados, tamaño de batch
+   Output: Pesos actualizados
+   Proceso:
+   1. Promediar gradientes: grad /= batch_size
+   2. Para cada capa:
+      - W = W - lr·(grad_W + λ·W)  [con L2]
+      - b = b - lr·grad_b
+
+void update_weights_momentum(MLP* mlp, int batch_size);
+   Input: MLP, batch_size
+   Output: Pesos actualizados con momentum
+   Proceso:
+   1. v_t = β·v_{t-1} + lr·grad
+   2. W_t = W_{t-1} - v_t
+
+void zero_gradients(MLP* mlp);
+   Input: MLP
+   Output: Gradientes puestos a cero
+   Proceso: Iterar capas y poner grads a 0
+
+
+2.7. MÓDULO: TRAINING (training.c/h)
+--------------------------------------------------------------------------------
+
+void train_mlp(MLP* mlp, Dataset* train_data, Dataset* val_data, 
+               TrainConfig* config);
+   Input: MLP, datos de train/val, configuración
+   Output: MLP entrenada
+   Proceso:
+   1. Para cada época:
+      a. Shuffle training data
+      b. Dividir en mini-batches
+      c. Para cada batch:
+         - Forward pass
+         - Backward pass
+         - Acumular gradientes
+         - Update weights
+      d. Evaluar en validation
+      e. Aplicar learning rate decay
+      f. Check early stopping
+   2. Imprimir métricas por época
+
+double compute_loss(MLP* mlp, Dataset* data);
+   Input: MLP, dataset
+   Output: Loss promedio (cross-entropy)
+   Proceso:
+   1. Para cada muestra:
+      - Forward pass
+      - Loss = -log(pred[true_class])
+   2. Promediar loss
+
+
+2.8. MÓDULO: PREDICTION (prediction.c/h)
+--------------------------------------------------------------------------------
+
+int predict(MLP* mlp, double* input);
+   Input: MLP entrenada, vector de features
+   Output: Clase predicha (0-4)
+   Proceso:
+   1. Forward pass
+   2. Retornar argmax(output_layer)
+
+void predict_proba(MLP* mlp, double* input, double* probabilities);
+   Input: MLP, input, array de salida
+   Output: Probabilidades de cada clase
+   Proceso:
+   1. Forward pass
+   2. Copiar output_layer (softmax) a probabilities
+
+void predict_batch(MLP* mlp, Dataset* data, int* predictions);
+   Input: MLP, dataset
+   Output: Array de predicciones
+   Proceso: Iterar y aplicar predict()
+
+
+2.9. MÓDULO: METRICS (metrics.c/h)
+--------------------------------------------------------------------------------
+
+Metrics* compute_metrics(MLP* mlp, Dataset* data);
+   Input: MLP, dataset
+   Output: Estructura con todas las métricas
+   Proceso:
+   1. Obtener predicciones para todo el dataset
+   2. Calcular confusion matrix
+   3. Calcular accuracy, precision, recall por clase
+   4. Calcular balanced accuracy y F1 ponderado
+
+void compute_confusion_matrix(int* predictions, Dataset* data, 
+                              int** conf_matrix);
+   Input: Predicciones, datos reales
+   Output: Matriz de confusión
+   Proceso: conf_matrix[true][pred]++
+
+double compute_accuracy(int* predictions, Dataset* data);
+   Input: Predicciones, datos
+   Output: Accuracy global
+   Proceso: correct / total
+
+double compute_balanced_accuracy(Metrics* metrics);
+   Input: Métricas con accuracy por clase
+   Output: Balanced accuracy
+   Proceso: mean(accuracy_per_class)
+
+double compute_f1_weighted(Metrics* metrics, Dataset* data);
+   Input: Métricas, datos
+   Output: F1-score ponderado
+   Proceso: Σ(f1_class_i × weight_i)
+
+void print_metrics(Metrics* metrics);
+   Input: Métricas
+   Proceso: Imprimir reporte formateado
+
+void free_metrics(Metrics* metrics);
+
+
+2.10. MÓDULO: MAIN (main.c)
+--------------------------------------------------------------------------------
+
+int main(int argc, char** argv);
+   Proceso:
+   1. Parsear argumentos de línea de comandos
+   2. Cargar dataset
+   3. Normalizar datos
+   4. Split train/test
+   5. Crear MLP con arquitectura definida
+   6. Configurar entrenamiento
+   7. Entrenar modelo
+   8. Evaluar en test set
+   9. Imprimir resultados
+   10. Guardar modelo (opcional)
+   11. Liberar memoria
+
+
+================================================================================
+3. DIAGRAMA DE FLUJO PRINCIPAL
+================================================================================
+
+INICIO
+   |
+   v
+[Cargar Dataset]
+   |
+   v
+[Normalizar (z-score)]
+   |
+   v
+[Split Train/Test (80/20)]
+   |
+   v
+[Crear MLP: 10→20→10→5]
+   |
+   v
+[Configurar Training]
+   |
+   v
+[LOOP: Épocas]
+   |
+   v
+   [Shuffle Train Data]
+      |
+      v
+   [LOOP: Mini-batches]
+      |
+      v
+      [Forward Pass]
+         |
+         v
+      [Calcular Loss]
+         |
+         v
+      [Backward Pass]
+         |
+         v
+      [Acumular Gradientes]
+         |
+         v
+      [Update Weights]
+   [FIN LOOP Batches]
+      |
+      v
+   [Evaluar en Validation]
+      |
+      v
+   [Aplicar LR Decay]
+      |
+      v
+   [Check Early Stopping]
+      |
+      v (continuar o break)
+[FIN LOOP Épocas]
+   |
+   v
+[Evaluar en Test Set]
+   |
+   v
+[Calcular Métricas]
+   |
+   v
+[Imprimir Reporte]
+   |
+   v
+[Liberar Memoria]
+   |
+   v
+FIN
+
+
+================================================================================
+4. PSEUDOCÓDIGO DE FUNCIONES CRÍTICAS
+================================================================================
+
+4.1. FORWARD PASS
+--------------------------------------------------------------------------------
+function forward_pass(mlp, input):
+    current_input = input
+    
+    for layer in mlp.layers:
+        # Linear transformation
+        for i in 0 to layer.num_neurons:
+            z[i] = layer.bias[i]
+            for j in 0 to layer.num_inputs:
+                z[i] += layer.weights[i][j] * current_input[j]
+        
+        # Activation
+        if layer.activation == "relu":
+            for i in 0 to layer.num_neurons:
+                layer.outputs[i] = max(0, z[i])
+        
+        elif layer.activation == "sigmoid":
+            for i in 0 to layer.num_neurons:
+                layer.outputs[i] = 1 / (1 + exp(-z[i]))
+        
+        elif layer.activation == "softmax":
+            max_z = max(z)
+            sum_exp = 0
+            for i in 0 to layer.num_neurons:
+                layer.outputs[i] = exp(z[i] - max_z)
+                sum_exp += layer.outputs[i]
+            for i in 0 to layer.num_neurons:
+                layer.outputs[i] /= sum_exp
+        
+        # Update for next layer
+        current_input = layer.outputs
+
+
+4.2. BACKWARD PASS
+--------------------------------------------------------------------------------
+function backward_pass(mlp, true_label):
+    num_layers = mlp.num_layers
+    
+    # Output layer delta
+    output_layer = mlp.layers[num_layers - 1]
+    for i in 0 to output_layer.num_neurons:
+        if i == true_label:
+            output_layer.deltas[i] = output_layer.outputs[i] - 1.0
+        else:
+            output_layer.deltas[i] = output_layer.outputs[i]
+    
+    # Backpropagate through hidden layers
+    for l from num_layers - 2 down to 0:
+        current = mlp.layers[l]
+        next = mlp.layers[l + 1]
+        
+        # Calculate deltas
+        for i in 0 to current.num_neurons:
+            sum = 0
+            for j in 0 to next.num_neurons:
+                sum += next.weights[j][i] * next.deltas[j]
+            
+            # Apply activation derivative
+            if current.activation == "relu":
+                derivative = (current.outputs[i] > 0) ? 1.0 : 0.0
+            elif current.activation == "sigmoid":
+                o = current.outputs[i]
+                derivative = o * (1 - o)
+            
+            current.deltas[i] = sum * derivative
+    
+    # Calculate gradients
+    for l in 0 to num_layers - 1:
+        layer = mlp.layers[l]
+        prev_outputs = (l == 0) ? input : mlp.layers[l-1].outputs
+        
+        for i in 0 to layer.num_neurons:
+            layer.bias_grads[i] += layer.deltas[i]
+            for j in 0 to layer.num_inputs:
+                layer.weight_grads[i][j] += layer.deltas[i] * prev_outputs[j]
+
+
+4.3. TRAINING LOOP
+--------------------------------------------------------------------------------
+function train_mlp(mlp, train_data, val_data, config):
+    best_val_loss = infinity
+    patience_counter = 0
+    
+    for epoch in 1 to config.epochs:
+        shuffle_dataset(train_data, config.seed + epoch)
+        
+        total_loss = 0
+        num_batches = ceil(train_data.num_samples / config.batch_size)
+        
+        for batch_idx in 0 to num_batches - 1:
+            zero_gradients(mlp)
+            
+            start = batch_idx * config.batch_size
+            end = min(start + config.batch_size, train_data.num_samples)
+            batch_size = end - start
+            
+            # Process batch
+            for i in start to end - 1:
+                forward_pass(mlp, train_data.data[i].features)
+                loss = -log(output[train_data.data[i].label])
+                total_loss += loss
+                backward_pass(mlp, train_data.data[i].label)
+            
+            # Update weights
+            update_weights_momentum(mlp, batch_size)
+        
+        # Validation
+        val_loss = compute_loss(mlp, val_data)
+        train_loss = total_loss / train_data.num_samples
+        
+        print("Epoch", epoch, "Train Loss:", train_loss, "Val Loss:", val_loss)
+        
+        # Learning rate decay
+        mlp.learning_rate *= config.lr_decay
+        
+        # Early stopping
+        if val_loss < best_val_loss - config.min_delta:
+            best_val_loss = val_loss
+            patience_counter = 0
+        else:
+            patience_counter++
+            if patience_counter >= config.early_stopping:
+                print("Early stopping at epoch", epoch)
+                break
+
+
+================================================================================
+5. GESTIÓN DE MEMORIA
+================================================================================
+
+Asignación dinámica requerida:
+- Dataset: O(n × d) donde n=muestras, d=features
+- Pesos MLP: O(Σ(L_i × L_{i+1})) para todas las capas
+- Arrays temporales: O(max_layer_size)
+
+Estrategia de liberación:
+1. free_dataset(): Liberar features y arrays de datos
+2. free_mlp(): Liberar capas recursivamente
+3. free_metrics(): Liberar confusion matrix y arrays
+
+Prevención de memory leaks:
+- Todo malloc() tiene correspondiente free()
+- Validación de malloc() != NULL
+- Liberación en orden inverso a asignación
+
+
+================================================================================
+FIN DEL DISEÑO
+================================================================================

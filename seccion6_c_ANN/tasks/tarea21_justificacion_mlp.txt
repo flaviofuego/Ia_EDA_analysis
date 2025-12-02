@@ -1,0 +1,173 @@
+================================================================================
+TAREA 21: JUSTIFICACIÓN DEL ALGORITMO SELECCIONADO
+================================================================================
+
+ALGORITMO SELECCIONADO: Perceptrón Multicapa (Multilayer Perceptron - MLP)
+
+
+1. FUNDAMENTO DEL ALGORITMO
+--------------------------------------------------------------------------------
+
+El Perceptrón Multicapa es una red neuronal artificial feedforward compuesta por:
+- Capa de entrada: Recibe las features normalizadas
+- Capas ocultas: Una o más capas con neuronas interconectadas
+- Capa de salida: Produce probabilidades para cada clase (via softmax)
+
+Proceso de entrenamiento:
+1. Forward propagation: Calcula activaciones capa por capa
+2. Cálculo de error: Compara predicción con etiqueta real
+3. Backpropagation: Propaga error hacia atrás calculando gradientes
+4. Actualización de pesos: Ajusta pesos usando gradiente descendente
+
+
+2. JUSTIFICACIÓN DE LA SELECCIÓN
+--------------------------------------------------------------------------------
+
+2.1. ADECUACIÓN AL PROBLEMA
+   • Clasificación multiclase: MLP con softmax maneja naturalmente 5 clases
+   • Relaciones no lineales: Capas ocultas capturan interacciones complejas
+   • Datos heterogéneos: Procesa eficientemente variables numéricas y codificadas
+   • Dataset grande: 217,581 muestras permiten entrenar red sin overfitting severo
+
+2.2. VENTAJAS TÉCNICAS
+   • Aproximador universal: Puede aproximar cualquier función continua
+   • Flexibilidad: Configurable en capas, neuronas y activaciones
+   • Gradiente eficiente: Backpropagation optimiza todos los pesos simultáneamente
+   • Escalabilidad: Implementación vectorizada permite procesamiento eficiente
+
+2.3. IMPLEMENTABILIDAD EN C
+   ✓ Estructuras básicas: Matrices y vectores implementables con arrays
+   ✓ Operaciones simples: Multiplicación de matrices y funciones matemáticas
+   ✓ Sin dependencias externas: Solo requiere librería math.h estándar
+   ✓ Control de memoria: Gestión explícita permite optimización
+
+
+3. EFECTIVIDAD DEL ALGORITMO
+--------------------------------------------------------------------------------
+
+3.1. TIPOS DE PROBLEMAS DONDE MLP ES EFECTIVO
+   ✓ Clasificación con fronteras de decisión complejas y no lineales
+   ✓ Problemas con interacciones de alto orden entre variables
+   ✓ Reconocimiento de patrones en datos multidimensionales
+   ✓ Tareas donde feature engineering manual es difícil
+   ✓ Datasets grandes donde otros métodos (KNN, SVM) son costosos
+
+3.2. APLICACIÓN AL PROBLEMA ESPECÍFICO
+   Dataset: Pruebas Saber 11 - Predicción de DESEMP_INGLES
+   - 217,581 observaciones
+   - 10 variables seleccionadas (5 numéricas + 5 categóricas codificadas)
+   - 5 clases desbalanceadas: A- (49.5%), A1 (28.2%), A2 (14.6%), B+ (1.3%), B1 (6.4%)
+
+   Por qué MLP es adecuado:
+   • Las relaciones entre variables académicas y desempeño son no lineales
+   • Interacciones complejas: nivel socioeconómico × desempeño en otras materias
+   • Softmax + cross-entropy manejan bien desbalanceo moderado
+   • Capas ocultas pueden aprender representaciones intermedias útiles
+
+
+4. COMPARACIÓN CON ALTERNATIVAS
+--------------------------------------------------------------------------------
+
+4.1. K-Nearest Neighbors (KNN)
+   ✗ O(n) en predicción es prohibitivo con 217k muestras
+   ✗ Sensible a escala y dimensionalidad
+   ✗ No aprende parámetros, solo memoriza
+   ✓ Fácil de implementar en C
+
+4.2. Regresión Logística
+   ✗ Asume relaciones lineales (insuficiente para este problema)
+   ✗ Requiere feature engineering manual extenso
+   ✓ Rápida y eficiente
+   ✓ Implementación simple en C
+
+4.3. Árbol de Decisión
+   ✓ Captura no linealidades
+   ✗ Propenso a overfitting
+   ✗ Desempeño inferior a ensemble methods
+   ~ Implementación moderadamente compleja en C
+
+4.4. Naive Bayes
+   ✗ Asume independencia condicional (violada en este dataset)
+   ✗ Rendimiento típicamente inferior en datos complejos
+   ✓ Implementación simple y rápida
+
+4.5. Perceptrón Simple
+   ✗ Solo funciones lineales (insuficiente)
+   ✗ No maneja multiclase naturalmente
+   ✓ Fácil de implementar
+
+
+5. CONFIGURACIÓN PROPUESTA
+--------------------------------------------------------------------------------
+
+Arquitectura:
+- Input layer: 10 neuronas (features)
+- Hidden layer 1: 20 neuronas (ReLU)
+- Hidden layer 2: 10 neuronas (ReLU)
+- Output layer: 5 neuronas (Softmax)
+
+Hiperparámetros:
+- Learning rate: 0.01 con decay exponencial
+- Batch size: 64
+- Epochs: 100 (con early stopping)
+- Inicialización: Xavier/He para convergencia estable
+- Regularización: L2 (weight decay) para prevenir overfitting
+
+Funciones:
+- Activación hidden: ReLU (evita vanishing gradient)
+- Activación output: Softmax (probabilidades multiclase)
+- Loss: Categorical Cross-Entropy
+- Optimizer: SGD con momentum o Adam
+
+
+6. EXPECTATIVAS DE DESEMPEÑO
+--------------------------------------------------------------------------------
+
+Basado en resultados de la Sección 5 (Python):
+- Random Forest: Balanced Accuracy ~0.65-0.70
+- Gradient Boosting: Balanced Accuracy ~0.67-0.72
+- MLP: Balanced Accuracy esperado ~0.68-0.73
+
+Meta para implementación en C:
+- Balanced Accuracy ≥ 0.65
+- Accuracy global ≥ 0.70
+- F1-score (weighted) ≥ 0.68
+- Convergencia en < 100 epochs
+
+
+7. LIMITACIONES Y MITIGACIONES
+--------------------------------------------------------------------------------
+
+7.1. LIMITACIONES DEL MLP
+   ⚠ Requiere normalización cuidadosa de datos
+   ⚠ Sensible a inicialización de pesos
+   ⚠ Hiperparámetros críticos (learning rate, arquitectura)
+   ⚠ Puede quedar en mínimos locales
+   ⚠ Menos interpretable que árboles o regresión logística
+
+7.2. ESTRATEGIAS DE MITIGACIÓN
+   ✓ Normalización z-score de todas las features
+   ✓ Inicialización Xavier/He según función de activación
+   ✓ Validación cruzada para selección de hiperparámetros
+   ✓ Múltiples inicializaciones aleatorias
+   ✓ Análisis de feature importance via perturbación
+
+
+8. CONCLUSIÓN
+--------------------------------------------------------------------------------
+
+El Perceptrón Multicapa es la elección óptima porque:
+
+1. Capacidad representacional suficiente para capturar complejidad del problema
+2. Implementable completamente en C sin dependencias externas complejas
+3. Equilibrio entre rendimiento predictivo e implementabilidad
+4. Arquitectura flexible configurable según necesidades computacionales
+5. Proceso de entrenamiento bien fundamentado matemáticamente
+
+La implementación en C permitirá:
+- Demostrar comprensión profunda del algoritmo
+- Control total sobre el proceso de optimización
+- Eficiencia computacional mediante operaciones optimizadas
+- Comparación directa con resultados de librerías de alto nivel
+
+================================================================================

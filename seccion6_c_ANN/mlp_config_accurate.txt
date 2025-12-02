@@ -1,0 +1,18 @@
+# Configuración PRECISA del Perceptrón Multicapa
+# Para máxima accuracy
+
+epochs=200
+batch_size=32
+learning_rate=0.005
+lr_decay=0.99
+
+momentum=0.95
+weight_decay=0.00005
+
+early_stopping_patience=20
+min_delta=0.0005
+
+hidden_layers=30,20,10
+
+seed=42
+verbose=1
